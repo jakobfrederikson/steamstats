@@ -3,7 +3,7 @@ from django.conf import settings
 
 def get_steam_player_summary(steam_id):
     """
-    Business logic for fetching steam data about  
+    Returns a .json() (dict) of a steam users summary
     
     :param steam_id: The user's steam ID as a number
     """
@@ -12,5 +12,9 @@ def get_steam_player_summary(steam_id):
         'steamids': steam_id
     }
 
-    res = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/', params)
-    return res
+    response = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/', params)
+
+    if response.status_code == requests.codes.ok:
+        return response.json()
+    else:
+        return response.status_code
