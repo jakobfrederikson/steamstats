@@ -14,6 +14,7 @@ def index(request):
     
     context = {
         'user_summary': player_summary,
+        'owned_games': owned_games,
         'persona_name': persona_name,
         'profile_url': profile_url
     }
