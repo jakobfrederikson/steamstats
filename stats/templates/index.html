@@ -1,11 +1,16 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
+{% extends "base_generic.html" %} {% block content %}
 <h1>Your Steam Summary</h1>
-<pre>
+<div>
+    <h3>Player Summary API Call result</h3>
+    <pre>
     {{ user_summary }}
-</pre>
+    </pre>
+</div>
+<div>
+    <h3>Owned Games Summary API Call Result</h3>
+    <pre>
+    </pre>
+</div>
 <h2>{{ persona_name }}</h2>
 <a href="{{ profile_url }}" target="_blank">Your steam profile</a>
-
 {% endblock %}

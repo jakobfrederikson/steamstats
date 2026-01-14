@@ -1,0 +1,25 @@
+Program algorithm:
+1. User opens website
+2. steamID input box is auto focused
+3. user pastes their steamID
+4. if user does not know steamID, they read help page:
+    4a. Go to your steam profile on a browser
+    4b. Look at the URL, and copy it
+    4c. Paste it into the SteamID input box
+5. Call GetPlayerSummaries (v0002)
+    5a. Process data, make sure to return just the object that has the player's summary.
+    5b. Otherwise, return a profile private error if the profile was private.
+    5c. Otherwise, return a generic error if we could not find anything.
+6. Call GetOwnedGames (v0001)
+    6a. Process data, make sure to return just the object that has just the player's owned games.
+    6b. Otherwise, return a profile private error if the profile was private.
+    6c. Otherwise, return a generic error if we could not find anything.
+7. Call GetRecentlyPlayedGames (v0001)?
+    7a. Process data, make sure to return just the object that has the player's recently played games.
+    7b. Otherwise, return a profile private error if the profile was private.
+    7c. Otherwise, return a generic error if we could not find anything.
+8. Call GetFriendList (v0001)?
+    8a. Process data, make sure to return just the object that has the player's friend list.
+    8b. Otherwise, return a profile private error if the profile was private.
+    8c. Otherwise, return a generic error if we could not find anything.
+9. 
