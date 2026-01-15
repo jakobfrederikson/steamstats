@@ -19,11 +19,10 @@
 <div>
   <h3>Player Summary API Call result</h3>
   <pre>
-    {{ user_summary }}
-    </pre
-  >
-  <h2>{{ persona_name }}</h2>
-  <a href="{{ profile_url }}" target="_blank">Your steam profile</a>
+    {{ player_summary }}
+  </pre>
+  <h2>{{ player_summary.personaname }}</h2>
+  <a href="{{ player_summary.profileurl }}" target="_blank">Your steam profile</a>
 </div>
 <div>
   <h3>Owned Games Summary API Call Result</h3>
