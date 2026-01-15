@@ -42,7 +42,6 @@ def get_steam_user_owned_games(steam_id):
     }
 
     response = requests.get('https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/', params)
-
     if response.status_code == requests.codes.ok:
         json_response = response.json()
         return json_response['response']['games']

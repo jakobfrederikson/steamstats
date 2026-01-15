@@ -23,3 +23,6 @@ Program algorithm:
     8b. Otherwise, return a profile private error if the profile was private.
     8c. Otherwise, return a generic error if we could not find anything.
 9. 
+
+
+my own ID (76561197999242706)
