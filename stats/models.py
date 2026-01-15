@@ -67,7 +67,7 @@ class OwnedGamesDTO():
     def __init__(self, **kwargs):
         self.appid = kwargs.get("appid")
         self.name = kwargs.get("name")
-        self.playtime_forever = kwargs.get("playtime_forever")
+        self.playtime_forever = round(kwargs.get("playtime_forever") / 60, 2)
         self.img_icon_url = kwargs.get("img_icon_url")
         self.has_community_visible_stats = kwargs.get("has_community_visible_stats")
         self.playtime_windows_forever = kwargs.get("playtime_windows_forever")

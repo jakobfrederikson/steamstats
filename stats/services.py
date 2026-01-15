@@ -51,6 +51,12 @@ def get_steam_user_owned_games(steam_id64):
         for game in json_response['response']['games']:
             owned_games_dtos.append(OwnedGamesDTO.from_dict(game))
 
+        owned_games_dtos.sort(reverse=True, key=sort_by_playtime)
+
         return owned_games_dtos
     else:
         return response.status_code
+
+
+def sort_by_playtime(e: OwnedGamesDTO):
+    return e.playtime_forever
