@@ -1,5 +1,6 @@
 import requests
 from django.conf import settings
+from .models import DTO_OwnedGames
 
 steam_api_key = settings.STEAM_API_KEY
 format = "json"
@@ -44,6 +45,19 @@ def get_steam_user_owned_games(steam_id):
     response = requests.get('https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/', params)
     if response.status_code == requests.codes.ok:
         json_response = response.json()
+        owned_games_dtos = []
+        
+        for game in json_response['response']['games']:
+            owned_games_dtos.append(DTO_OwnedGames.from_dict(game))
+        
+        for game in owned_games_dtos:
+            print(f"{game.name}: {game.appid}")
+
+        # Convert minutes to hours, 2 decimal places
+        for game in json_response['response']['games']:
+            game['playtime_forever'] = round(int(game['playtime_forever']) / 60, 2)
+            #print(game)
+
         return json_response['response']['games']
     else:
         return response.status_code
