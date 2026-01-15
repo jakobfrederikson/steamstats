@@ -3,7 +3,11 @@ from django.db import models
 # Create your models here.
 
 # ===========================
-# API Response Models
+# [          DTOs           ]
+# ===========================
+
+class PlayerSummaryDTO():
+    pass
 
 # {'appid': 3240220, 
 # 'name': 'Grand Theft Auto V Enhanced', 
@@ -17,7 +21,8 @@ from django.db import models
 # 'rtime_last_played': 0, 
 # 'content_descriptorids': [1, 2, 5], 
 # 'playtime_disconnected': 0}
-class DTO_OwnedGames():
+# https://hackernoon.com/dto-in-python-an-explanation
+class OwnedGamesDTO():
     def __init__(self, **kwargs):
         self.appid = kwargs.get("appid")
         self.name = kwargs.get("name")
@@ -38,6 +43,3 @@ class DTO_OwnedGames():
     @classmethod
     def from_dict(cls, dict_obj):
         return cls(**dict_obj)
-
-    
-    pass
