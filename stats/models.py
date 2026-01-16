@@ -76,7 +76,7 @@ class OwnedGamesDTO():
         self.playtime_mac_forever = kwargs.get("playtime_mac_forever")
         self.playtime_linux_forever = kwargs.get("playtime_linux_forever") 
         self.playtime_deck_forever = kwargs.get("playtime_deck_forever")
-        self.rtime_last_played = kwargs.get("rtime_last_played")
+        self.rtime_last_played = dt.datetime.fromtimestamp(kwargs.get("rtime_last_played")) if kwargs.get("rtime_last_played") is not None else None
         self.content_descriptorids = kwargs.get("content_descriptorids")
         self.playtime_disconnected = kwargs.get("playtime_disconnected")
 
