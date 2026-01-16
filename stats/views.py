@@ -12,15 +12,22 @@ def index(request):
         if form.is_valid():
             try:
                 raw_steam_id = form.cleaned_data['steam_id']
-                steam_id = SteamID(raw_steam_id)
-                steam_id64 = steam_id.get_steam64_id()
+                steam_id_obj = SteamID(raw_steam_id)
 
-                player_summary = services.get_steam_player_summary(steam_id64)
-                owned_games = services.get_steam_user_owned_games(steam_id64)
+                steam_ids = {
+                    'steamid': steam_id_obj.get_steam_id(),
+                    'steamid3': steam_id_obj.get_steam_id3(),
+                    'steam32id': steam_id_obj.get_steam32_id(),
+                    'steam64id': steam_id_obj.get_steam64_id()
+                }
+
+                player_summary = services.get_steam_player_summary(steam_ids['steam64id'])
+                owned_games = services.get_steam_user_owned_games(steam_ids['steam64id'])
 
                 context = {
                     'show_steam_stats': 'yes',
                     'form': form,
+                    'steam_ids': steam_ids,
                     'player_summary': player_summary,
                     'owned_games': owned_games,
                 }
