@@ -18,16 +18,11 @@ def index(request):
                 player_summary = services.get_steam_player_summary(steam_id64)
                 owned_games = services.get_steam_user_owned_games(steam_id64)
 
-                persona_name = player_summary['personaname']
-                profile_url = player_summary['profileurl']
-                
                 context = {
                     'show_steam_stats': 'yes',
                     'form': form,
-                    'user_summary': player_summary,
+                    'player_summary': player_summary,
                     'owned_games': owned_games,
-                    'persona_name': persona_name,
-                    'profile_url': profile_url
                 }
                 # re-render the page with new context
                 return render(request, 'index.html', context=context)
