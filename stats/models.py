@@ -1,5 +1,7 @@
 from django.db import models
 
+import datetime as dt
+
 # Create your models here.
 
 # ===========================
@@ -35,7 +37,7 @@ class PlayerSummaryDTO():
         self.avatarmedium = kwargs.get("avatarmedium")
         self.avatarfull = kwargs.get("avatarfull")
         self.avatarhash = kwargs.get("avatarhash")
-        self.lastlogoff = kwargs.get("lastlogoff")
+        self.lastlogoff = dt.datetime.fromtimestamp(kwargs.get("lastlogoff")) if kwargs.get("lastlogoff") is not None else None
         self.personastate = kwargs.get("personastate")
         self.primaryclanid = kwargs.get("primaryclanid")
         self.timecreated = kwargs.get("timecreated")
