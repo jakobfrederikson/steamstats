@@ -85,6 +85,10 @@ def get_steam_user_owned_games(steam_id64):
 def sort_by_playtime(e: OwnedGamesDTO):
     return e.playtime_forever
 
-
 # TODO:
-# 1. add support for http://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=KEYHERE1&steamid=STEAMIDHERE
+# 1. Get game price via country code??
+# 2. https://store.steampowered.com/api/appdetails?filters=price_overview&appids=620
+
+
+
+

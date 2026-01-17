@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %}
-{% block title_status %} | {{ player_summary.personaname }} stats {% endblock %}
+{% block title_status %}{{ player_summary.personaname }} | {% endblock %}
 {% block content %}
 
 
@@ -11,6 +11,14 @@
         <div class="d-flex justify-content-between">
           <span><strong>Player Name</strong></span>
           <span>{{ player_summary.personaname }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span><strong>Player Level</strong></span>
+          <span>{{ player_level }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span><strong>Country Code</strong></span>
+          <span>{{ player_summary.loccountrycode }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <span><strong>SteamID</strong></span>
@@ -48,50 +56,41 @@
 
 <br />
 
-<div>
-  <div class="accordion" id="owned_games_accordion">
-    <div class="accordion-item">
-      <h1 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
-          All owned games
-        </button>
-      </h1>
-      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#owned_games_accordion">
-      <div class="accordion-body">
-        <h6>{{ owned_games|length }} games in library</h6>
-          <div class="row">
-            {% for game in owned_games %}
-            <div class="col-md-4 col-sm-6 mb-4">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ game.appid }}/{{ game.img_icon_url }}.jpg"
-                      class="me-2"
-                    />
-                    <h5 class="card-title mb-0">{{ game.name }}</h5>
-                  </div>
-                  <p class="card-text">
-                    <strong>{{ game.playtime_forever }}</strong> hrs played
-                  </p>
-                  <p>
-                    Last played {{ game.rtime_last_played }}
-                  </p>
-                  <p class="card-text">
-                    <a
-                      href="https://store.steampowered.com/app/{{ game.appid }}"
-                      target="_blank"
-                      >View on the steam store</a
-                    >
-                  </p>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-      </div>
-    </div>
-    </div>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h6>{{ owned_games|length }} games in library</h6>
   </div>
 </div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <table class="table table-hover" id="ownedGamesTable">
+      <thead>
+        <tr>
+        <th></th> <!--  Game picture via OwnedGamesDTO.appid -->
+        <th>Name</th>
+        <th>Playtime</th>
+        <th>Last played</th>
+        <th>Price</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for game in owned_games %}
+          <tr>
+            <td> 
+              <img
+                src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ game.appid }}/{{ game.img_icon_url }}.jpg"
+              />
+            </td>
+            <td>{{ game.name }}</td>
+            <td>{{ game.playtime_forever }} hrs</td>
+            <td>{{ game.rtime_last_played }}</td>
+            <td>$00.00 nzd</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
 {% endblock %}

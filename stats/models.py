@@ -81,7 +81,10 @@ def _get_persona_state(state):
 # 'content_descriptorids': [1, 2, 5], 
 # 'playtime_disconnected': 0}
 # https://hackernoon.com/dto-in-python-an-explanation
-class OwnedGamesDTO():
+class OwnedGamesDTO(models.Model):
+    appid: int
+    name: str
+
     def __init__(self, **kwargs):
         self.appid = kwargs.get("appid")
         self.name = kwargs.get("name")
