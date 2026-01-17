@@ -1,13 +1,18 @@
 {% extends "base_generic.html" %} 
 
 {% block content %}
-
 <div class="container-flud mt-3">
   <div
     class="d-flex flex-column flex-md-row p-4 align-items-center justify-content-center"
   >
-    <form action="{% url 'detail' %}" method="post">
-      {% csrf_token %} {{ form.as_table }}
+    <form action="" method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+          {{ field }}
+        </div>
+      {% endfor %}
       <input type="submit" value="Submit" class="btn btn-primary" />
     </form>
   </div>
