@@ -1,138 +1,15 @@
 {% extends "base_generic.html" %} 
-{% block title_status %} | {{ player_summary.personaname }} stats {% endblock %}
+
 {% block content %}
 
 <div class="container-flud mt-3">
   <div
     class="d-flex flex-column flex-md-row p-4 align-items-center justify-content-center"
   >
-    <form action="" method="post">
+    <form action="{% url 'detail' %}" method="post">
       {% csrf_token %} {{ form.as_table }}
       <input type="submit" value="Submit" class="btn btn-primary" />
     </form>
   </div>
 </div>
-
-{% if show_steam_stats == "yes" %}
-<h1>Your Steam Summary</h1>
-<div>
-  <ul class="list-group list-group-horizontal">
-    <li class="list-group-item">
-      <img src="{{ player_summary.avatarfull }}" />
-    </li>
-    <li class="list-group-item">
-      <strong><h2>{{ player_summary.personaname }}</h2></strong>
-    </li>
-  </ul>
-  <ul class="list-group">
-    <li class="list-group-item">
-      <div class="container">
-      <div class="row">
-        <div class="col">
-          <strong>SteamID:</strong>
-        </div>
-        <div class="col text-end">{{ steam_ids.steamid }}</div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <strong>SteamID3:</strong>
-        </div>
-        <div class="col text-end">{{ steam_ids.steamid3 }}</div>
-      </div>
-      <div class="row justify-content-md-center">
-        <div class="col">
-          <strong>Steam32ID:</strong>
-        </div>
-        <div class="col text-end">{{ steam_ids.steam32id }}</div>
-      </div>
-      <div class="row justify-content-md-center">
-        <div class="col">
-          <strong>Steam64ID:</strong>
-        </div>
-        <div class="col text-end">{{ steam_ids.steam64id }}</div>
-      </div>
-    </div>
-    </li>
-    <li class="list-group-item">
-      <strong
-        ><a href="{{ player_summary.profileurl }}" target="_blank"
-          >Steam Profile</a
-        ></strong
-      >
-    </li>
-    <li class="list-group-item">
-      <strong>Current Status:</strong>
-      {% if player_summary.personastate == 0 %}
-      <span class="text-secondary">0 - Offline</span>
-      {% elif player_summary.personastate == 1 %}
-      <span class="text-success">1 - Online</span>
-      {% elif player_summary.personastate == 2 %}
-      <span class="text-danger">2 - Busy</span>
-      {% elif player_summary.personastate == 3 %}
-      <span class="text-warning">3 - Away</span>
-      {% elif player_summary.personastate == 4 %}
-      <span class="text-primary">4 - Snooze</span>
-      {% elif player_summary.personastate == 5 %}
-      <span class="text-warning">5 - Looking to trade</span>
-      {% elif player_summary.personastate == 6 %}
-      <span class="text-primary-emphasis">6 - Looking to play</span>
-      {% endif %}
-    </li>
-    <li class="list-group-item">
-      <strong>Last online:</strong> {{ player_summary.lastlogoff|default:'Unknown' }}
-    </li>
-    <li class="list-group-item">
-      <strong>Visibility state:</strong> {{ player_summary.communityvisibilitystate }}
-    </li>
-  </ul>
-</div>
-
-<br />
-
-<div>
-  <div class="accordion" id="owned_games_accordion">
-    <div class="accordion-item">
-      <h1 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          All owned games
-        </button>
-      </h1>
-      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#owned_games_accordion">
-      <div class="accordion-body">
-        <h6>{{ owned_games|length }} games in library</h6>
-          <div class="row">
-            {% for game in owned_games %}
-            <div class="col-md-4 col-sm-6 mb-4">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                    <img
-                      src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ game.appid }}/{{ game.img_icon_url }}.jpg"
-                      class="me-2"
-                    />
-                    <h5 class="card-title mb-0">{{ game.name }}</h5>
-                  </div>
-                  <p class="card-text">
-                    <strong>{{ game.playtime_forever }}</strong> hrs played
-                  </p>
-                  <p>
-                    Last played {{ game.rtime_last_played }}
-                  </p>
-                  <p class="card-text">
-                    <a
-                      href="https://store.steampowered.com/app/{{ game.appid }}"
-                      target="_blank"
-                      >View on the steam store</a
-                    >
-                  </p>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-      </div>
-    </div>
-    </div>
-  </div>
-</div>
-{% endif %} {% endblock %}
+{% endblock %}

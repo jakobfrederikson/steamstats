@@ -7,7 +7,17 @@ from stats.SteamIDConverterPython.SteamID import SteamID, InvalidSteamID
 
 # Create your views here.
 def index(request):
-    if request.method == "POST":
+    form = SteamIDForm()
+
+    context = {
+        'form': form
+    }    
+    
+    return render(request, 'index.html', context=context)    
+
+
+def stats_detail(request):
+    if request.method == 'POST':
         form = SteamIDForm(request.POST)
         if form.is_valid():
             try:
@@ -32,15 +42,12 @@ def index(request):
                     'owned_games': owned_games,
                 }
                 # re-render the page with new context
-                return render(request, 'index.html', context=context)
+                return render(request, 'stats/stats_detail.html', context=context)
             except InvalidSteamID:
                 form.add_error('steam_id', "The steam ID provided is invalid.")
+                context = {
+                    'form' : form
+                }
+                return render(request, "index.html", context=context)
     else:
-        form = SteamIDForm()
-
-    context = {
-        'form': form,
-        'show_steam_stats': 'no'
-    }    
-    
-    return render(request, 'index.html', context=context)    
+        index(request)
