@@ -1,10 +1,9 @@
 {% extends "base_generic.html" %} 
 
 {% block content %}
-<div class="container-flud mt-3">
-  <div
-    class="d-flex flex-column flex-md-row p-4 align-items-center justify-content-center"
-  >
+
+<div class="row justify-content-center mt-4">
+  <div class="col-md-4">
     <form action="" method="post">
       {% csrf_token %}
       {% for field in form %}
@@ -13,8 +12,13 @@
           {{ field }}
         </div>
       {% endfor %}
-      <input type="submit" value="Submit" class="btn btn-primary" />
+      <div class="d-grid">
+        <input type="submit" value="Submit" class="btn btn-primary"/>
+      </div>      
     </form>
   </div>
 </div>
+
+    
+
 {% endblock %}

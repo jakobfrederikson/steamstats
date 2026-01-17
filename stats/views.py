@@ -40,7 +40,7 @@ def detail(request, steam_id):
             'player_summary': player_summary,
             'owned_games': owned_games,
         }
-        # re-render the page with new context
+        
         return render(request, 'stats/detail.html', context=context)
     except InvalidSteamID:
         # send back to index advising Steam ID not valid

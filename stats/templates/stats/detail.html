@@ -1,77 +1,49 @@
 {% extends "base_generic.html" %}
 {% block title_status %} | {{ player_summary.personaname }} stats {% endblock %}
 {% block content %}
-<h1>Your Steam Summary</h1>
-<div>
-  <ul class="list-group list-group-horizontal">
-    <li class="list-group-item">
-      <img src="{{ player_summary.avatarfull }}" />
-    </li>
-    <li class="list-group-item">
-      <strong><h2>{{ player_summary.personaname }}</h2></strong>
-    </li>
-  </ul>
-  <ul class="list-group">
-    <li class="list-group-item">
-      <div class="container">
-      <div class="row">
-        <div class="col">
-          <strong>SteamID:</strong>
+
+
+<div class="row justify-content-center mt-4 mb-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <img src="{{ player_summary.avatarfull }}" style="height: 64px; width: 64px;">
+        <div class="d-flex justify-content-between">
+          <span><strong>Player Name</strong></span>
+          <span>{{ player_summary.personaname }}</span>
         </div>
-        <div class="col text-end">{{ steam_ids.steamid }}</div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <strong>SteamID3:</strong>
+        <div class="d-flex justify-content-between">
+          <span><strong>SteamID</strong></span>
+          <span>{{ steam_ids.steamid }}</span>
         </div>
-        <div class="col text-end">{{ steam_ids.steamid3 }}</div>
-      </div>
-      <div class="row justify-content-md-center">
-        <div class="col">
-          <strong>Steam32ID:</strong>
+        <div class="d-flex justify-content-between">
+          <span><strong>SteamID3</strong></span>
+          <span>[{{ steam_ids.steamid3 }}]</span>
         </div>
-        <div class="col text-end">{{ steam_ids.steam32id }}</div>
-      </div>
-      <div class="row justify-content-md-center">
-        <div class="col">
-          <strong>Steam64ID:</strong>
+        <div class="d-flex justify-content-between">
+          <span><strong>Steam32ID</strong></span>
+          <span>{{ steam_ids.steam32id }}</span>
         </div>
-        <div class="col text-end">{{ steam_ids.steam64id }}</div>
-      </div>
+        <div class="d-flex justify-content-between">
+          <span><strong>Steam64ID</strong></span>
+          <span>{{ steam_ids.steam64id }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span><strong>Current Status</strong></span>
+          <span>{{ player_summary.personastate }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span><strong>Last Log Off</strong></span>
+          <span>{{ player_summary.lastlogoff }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span><strong>Private/Public Profile</strong></span>
+          <span>{{ player_summary.profilestate }}</span>
+        </div>
+        <span><strong=><a href="{{ player_summary.profileurl }}" target="_blank">Visit steam profile in a new tab</a></strong>
+      </div>      
     </div>
-    </li>
-    <li class="list-group-item">
-      <strong
-        ><a href="{{ player_summary.profileurl }}" target="_blank"
-          >Steam Profile</a
-        ></strong
-      >
-    </li>
-    <li class="list-group-item">
-      <strong>Current Status:</strong>
-      {% if player_summary.personastate == 0 %}
-      <span class="text-secondary">0 - Offline</span>
-      {% elif player_summary.personastate == 1 %}
-      <span class="text-success">1 - Online</span>
-      {% elif player_summary.personastate == 2 %}
-      <span class="text-danger">2 - Busy</span>
-      {% elif player_summary.personastate == 3 %}
-      <span class="text-warning">3 - Away</span>
-      {% elif player_summary.personastate == 4 %}
-      <span class="text-primary">4 - Snooze</span>
-      {% elif player_summary.personastate == 5 %}
-      <span class="text-warning">5 - Looking to trade</span>
-      {% elif player_summary.personastate == 6 %}
-      <span class="text-primary-emphasis">6 - Looking to play</span>
-      {% endif %}
-    </li>
-    <li class="list-group-item">
-      <strong>Last online:</strong> {{ player_summary.lastlogoff|default:'Unknown' }}
-    </li>
-    <li class="list-group-item">
-      <strong>Visibility state:</strong> {{ player_summary.communityvisibilitystate }}
-    </li>
-  </ul>
+  </div>
 </div>
 
 <br />
@@ -80,7 +52,7 @@
   <div class="accordion" id="owned_games_accordion">
     <div class="accordion-item">
       <h1 class="accordion-header">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">
           All owned games
         </button>
       </h1>

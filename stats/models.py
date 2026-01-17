@@ -38,7 +38,7 @@ class PlayerSummaryDTO():
         self.avatarfull = kwargs.get("avatarfull")
         self.avatarhash = kwargs.get("avatarhash")
         self.lastlogoff = dt.datetime.fromtimestamp(kwargs.get("lastlogoff")) if kwargs.get("lastlogoff") is not None else None
-        self.personastate = kwargs.get("personastate")
+        self.personastate = _get_persona_state(int(kwargs.get("personastate")))
         self.primaryclanid = kwargs.get("primaryclanid")
         self.timecreated = kwargs.get("timecreated")
         self.personastateflags = kwargs.get("personastateflags")
@@ -51,6 +51,22 @@ class PlayerSummaryDTO():
     def from_dict(cls, dict_obj):
         return cls(**dict_obj) 
     
+def _get_persona_state(state):
+    if state == 0:
+        return "0 - Offline"
+    elif state == 1:
+        return "1 - Online"
+    elif state == 2:
+        return "2 - Busy"
+    elif state == 3:
+        return "3 - Away"
+    elif state == 4:
+        return "4 - Snooze"
+    elif state == 5:
+        return "5 - Looking to trade"
+    elif state == 6:
+        return "6 - Looking to play"
+
 
 # {'appid': 3240220, 
 # 'name': 'Grand Theft Auto V Enhanced', 
