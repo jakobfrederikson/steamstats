@@ -7,26 +7,6 @@ import datetime as dt
 # ===========================
 # [          DTOs           ]
 # ===========================
-
-#{'response': 
-# {'players': 
-# [{'steamid': '76561197999242706', 
-# 'communityvisibilitystate': 3, 
-# 'profilestate': 1, 
-# 'personaname': 'worzell', 
-# 'profileurl': 'https://steamcommunity.com/profiles/76561197999242706/', 
-# 'avatar': 'https://avatars.steamstatic.com/1a24480f72d5b0b199caea03a1866e1eeac489f7.jpg', 
-# 'avatarmedium': 'https://avatars.steamstatic.com/1a24480f72d5b0b199caea03a1866e1eeac489f7_medium.jpg', 
-# 'avatarfull': 'https://avatars.steamstatic.com/1a24480f72d5b0b199caea03a1866e1eeac489f7_full.jpg', 
-# 'avatarhash': '1a24480f72d5b0b199caea03a1866e1eeac489f7', 
-# 'lastlogoff': 1768464262, 
-# 'personastate': 0, 
-# 'primaryclanid': '103582791456245411', 
-# 'timecreated': 1213262345, 
-# 'personastateflags': 0, 
-# 'loccountrycode': 'NZ'}]}}
-# key=BFB6CBEDE05D8B4E5F4860D05755C44D&steamids=76561198065726761
-
 class PlayerSummaryDTO():
     def __init__(self, **kwargs):
         self.steamid = kwargs.get("steamid")
@@ -71,22 +51,16 @@ def _get_persona_state(state):
         return "6 - Looking to play"
 
 
-# {'appid': 3240220, 
-# 'name': 'Grand Theft Auto V Enhanced', 
-# 'playtime_forever': 0.0, 
-# 'img_icon_url': '8355a7bbdb704f727bfba80ec56bc7228991338e', 
-# 'has_community_visible_stats': True, 
-# 'playtime_windows_forever': 0, 
-# 'playtime_mac_forever': 0, 
-# 'playtime_linux_forever': 0, 
-# 'playtime_deck_forever': 0, 
-# 'rtime_last_played': 0, 
-# 'content_descriptorids': [1, 2, 5], 
-# 'playtime_disconnected': 0}
-# https://hackernoon.com/dto-in-python-an-explanation
-class OwnedGamesDTO(models.Model):
-    appid: int
-    name: str
+class GamePrice(models.Model):
+    appid = models.IntegerField(unique=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField()
+    final_formatted = models.CharField()
+    last_updated = models.DateTimeField()
+
+
+class OwnedGamesDTO():
+    price_info: GamePrice
 
     def __init__(self, **kwargs):
         self.appid = kwargs.get("appid")

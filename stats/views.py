@@ -34,18 +34,29 @@ def detail(request, steam_id):
         player_summary = services.get_steam_player_summary(steam_ids['steam64id'])
         player_level = services.get_steam_player_level(steam_ids['steam64id'])
         owned_games = services.get_steam_user_owned_games(steam_ids['steam64id'])
+
         if owned_games == {}:
             empty_games = True
         else:
             empty_games = False
 
+        if not empty_games:
+            appids = []
+            for game in owned_games:
+                appids.append(game.appid)
+            game_prices = services.get_players_owned_games_prices(appids)
+
+            price_map = {obj['appid']: obj for obj in game_prices}
+
+            for game in owned_games:
+                game.price_info = price_map.get(game.appid)
+
         context = {
-            'show_steam_stats': 'yes',
             'player_summary': player_summary,
             'player_level': player_level,
             'steam_ids': steam_ids,
             'owned_games': owned_games,
-            'empty_games': empty_games
+            'empty_games': empty_games,
         }
         
         return render(request, 'stats/detail.html', context=context)
