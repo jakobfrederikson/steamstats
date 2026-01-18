@@ -25,6 +25,7 @@ import datetime as dt
 # 'timecreated': 1213262345, 
 # 'personastateflags': 0, 
 # 'loccountrycode': 'NZ'}]}}
+# key=BFB6CBEDE05D8B4E5F4860D05755C44D&steamids=76561198065726761
 
 class PlayerSummaryDTO():
     def __init__(self, **kwargs):
@@ -38,11 +39,13 @@ class PlayerSummaryDTO():
         self.avatarfull = kwargs.get("avatarfull")
         self.avatarhash = kwargs.get("avatarhash")
         self.lastlogoff = dt.datetime.fromtimestamp(kwargs.get("lastlogoff")) if kwargs.get("lastlogoff") is not None else None
-        self.personastate = kwargs.get("personastate")
+        self.personastate = _get_persona_state(int(kwargs.get("personastate")))
         self.primaryclanid = kwargs.get("primaryclanid")
-        self.timecreated = kwargs.get("timecreated")
+        self.timecreated = dt.datetime.fromtimestamp(kwargs.get("timecreated")) if kwargs.get("timecreated") is not None else None
         self.personastateflags = kwargs.get("personastateflags")
-        self.loccountrycode = kwargs.get("loccountrycode")      
+        
+        # NOT VISIBLE IF profilestate == 1
+        self.loccountrycode = kwargs.get("loccountrycode") 
 
     def to_dict(self):
         return self.__dict__
@@ -51,6 +54,22 @@ class PlayerSummaryDTO():
     def from_dict(cls, dict_obj):
         return cls(**dict_obj) 
     
+def _get_persona_state(state):
+    if state == 0:
+        return "0 - Offline"
+    elif state == 1:
+        return "1 - Online"
+    elif state == 2:
+        return "2 - Busy"
+    elif state == 3:
+        return "3 - Away"
+    elif state == 4:
+        return "4 - Snooze"
+    elif state == 5:
+        return "5 - Looking to trade"
+    elif state == 6:
+        return "6 - Looking to play"
+
 
 # {'appid': 3240220, 
 # 'name': 'Grand Theft Auto V Enhanced', 
@@ -65,7 +84,10 @@ class PlayerSummaryDTO():
 # 'content_descriptorids': [1, 2, 5], 
 # 'playtime_disconnected': 0}
 # https://hackernoon.com/dto-in-python-an-explanation
-class OwnedGamesDTO():
+class OwnedGamesDTO(models.Model):
+    appid: int
+    name: str
+
     def __init__(self, **kwargs):
         self.appid = kwargs.get("appid")
         self.name = kwargs.get("name")
@@ -76,7 +98,7 @@ class OwnedGamesDTO():
         self.playtime_mac_forever = kwargs.get("playtime_mac_forever")
         self.playtime_linux_forever = kwargs.get("playtime_linux_forever") 
         self.playtime_deck_forever = kwargs.get("playtime_deck_forever")
-        self.rtime_last_played = kwargs.get("rtime_last_played")
+        self.rtime_last_played = dt.datetime.fromtimestamp(kwargs.get("rtime_last_played")) if kwargs.get("rtime_last_played") is not None else None
         self.content_descriptorids = kwargs.get("content_descriptorids")
         self.playtime_disconnected = kwargs.get("playtime_disconnected")
 
