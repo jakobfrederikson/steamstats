@@ -66,9 +66,15 @@ def get_steam_user_owned_games(steam_id64):
         'include_played_free_games': 1,
     }
 
+    # Response = {"response":{}} if profile is private
     response = requests.get('https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/', params)
+
     if response.status_code == requests.codes.ok:
         json_response = response.json()
+
+        # If user's profile is private, return empty
+        if json_response == {"response": {}}:
+            return {}
 
         owned_games_dtos = []
         

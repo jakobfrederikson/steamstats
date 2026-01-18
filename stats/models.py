@@ -25,6 +25,7 @@ import datetime as dt
 # 'timecreated': 1213262345, 
 # 'personastateflags': 0, 
 # 'loccountrycode': 'NZ'}]}}
+# key=BFB6CBEDE05D8B4E5F4860D05755C44D&steamids=76561198065726761
 
 class PlayerSummaryDTO():
     def __init__(self, **kwargs):
@@ -40,9 +41,11 @@ class PlayerSummaryDTO():
         self.lastlogoff = dt.datetime.fromtimestamp(kwargs.get("lastlogoff")) if kwargs.get("lastlogoff") is not None else None
         self.personastate = _get_persona_state(int(kwargs.get("personastate")))
         self.primaryclanid = kwargs.get("primaryclanid")
-        self.timecreated = kwargs.get("timecreated")
+        self.timecreated = dt.datetime.fromtimestamp(kwargs.get("timecreated")) if kwargs.get("timecreated") is not None else None
         self.personastateflags = kwargs.get("personastateflags")
-        self.loccountrycode = kwargs.get("loccountrycode")      
+        
+        # NOT VISIBLE IF profilestate == 1
+        self.loccountrycode = kwargs.get("loccountrycode") 
 
     def to_dict(self):
         return self.__dict__

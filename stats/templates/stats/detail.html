@@ -48,6 +48,10 @@
           <span><strong>Private/Public Profile</strong></span>
           <span>{{ player_summary.profilestate }}</span>
         </div>
+        <div class="d-flex justify-content-between">
+          <span><strong>Profile Creation Date</strong></span>
+          <span>{{ player_summary.timecreated }}</span>
+        </div>
         <span><strong=><a href="{{ player_summary.profileurl }}" target="_blank">Visit steam profile in a new tab</a></strong>
       </div>      
     </div>
@@ -58,10 +62,21 @@
 
 <div class="row justify-content-center">
   <div class="col-md-8">
+    {% if empty_games %}
+    <h6>[unknown] games in library</h6>    
+    {% else %}
     <h6>{{ owned_games|length }} games in library</h6>
+    {% endif %}
   </div>
 </div>
 
+{% if empty_games %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <p>Games list or profile is private, cannot display games list</p>
+  </div>
+</div>
+{% else %}
 <div class="row justify-content-center">
   <div class="col-md-8">
     <table class="table table-hover" id="ownedGamesTable">
@@ -92,5 +107,6 @@
     </table>
   </div>
 </div>
+{% endif %}
 
 {% endblock %}
