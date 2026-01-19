@@ -96,6 +96,23 @@ def sort_by_playtime(e: OwnedGamesDTO):
     return e.playtime_forever
 
 
+# Possibly split this function into multiple code pieces
+# Possibly also - delete DB and start again with the following ideals:
+# 1. Check if game data exists in DB
+# 2. If can't find the appid - then request it via the steam store
+# 3. We need to add the following information:
+# 4. Game name, Appid, Price, Currency, final_formatted, last_updated
+
+# 5. This requires getting data from the OwnedGamesDTO:
+# 6. appid, name, img_icon_url
+
+# 7. And combining with the steamstore call:
+# 8. price, currecny, final_formatted, last_updated <- locally done in the function i guess
+
+# 9. If a game is free (find out how to find this), mark it in db as 'free'
+
+# 10. use 76561198190514485 for testing
+
 def get_players_owned_games_prices(appids):
     """
     Returns a list of GamePrice objects.
@@ -135,9 +152,11 @@ def get_players_owned_games_prices(appids):
     # so we don't get IP banned again #Based ✔️
     if missing_appids:
         for appid in missing_appids:
+            # here, need to put cc = 'NZ' or something
             params = {
                 'filters': 'price_overview',
                 'appids': appid,
+                'cc': 'NZ', # Only get $NZD requests
             }
             print("Testing, am I in the missing_apids function?")
             response = response = requests.get('https://store.steampowered.com/api/appdetails', params)
@@ -181,8 +200,3 @@ def get_players_owned_games_prices(appids):
             })
 
     return game_prices_to_return
-
-
-# TODO:
-# 1. Get game price via country code??
-# 2. https://store.steampowered.com/api/appdetails?filters=price_overview&appids=620

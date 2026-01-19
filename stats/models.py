@@ -51,7 +51,9 @@ def _get_persona_state(state):
         return "6 - Looking to play"
 
 
-class GamePrice(models.Model):
+class GameInformation(models.Model):
+    name = models.CharField()
+    img_icon_url = models.URLField()
     appid = models.IntegerField(unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField()
