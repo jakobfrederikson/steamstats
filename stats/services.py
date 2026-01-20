@@ -110,6 +110,30 @@ def sort_by_playtime(e: OwnedGamesDTO):
 # 8. price, currecny, final_formatted, last_updated <- locally done in the function i guess
 
 # 9. If a game is free (find out how to find this), mark it in db as 'free'
+# 9a. It looks like if a game is free, and we request steam store data, it returns the following:
+# Example for marvel rivals: https://store.steampowered.com/api/appdetails?filters=price_overview&appids=2767030&cc=NZ
+# {
+#   "2767030": {
+#     "success": true,
+#     "data": []
+#   }
+# }
+#
+# Example for CS2: https://store.steampowered.com/api/appdetails?filters=price_overview&appids=730&cc=NZ
+#{
+#   "730": {
+#     "success": true,
+#     "data": []
+#   }
+# }
+#
+# Example for Muck: https://store.steampowered.com/api/appdetails?filters=price_overview&appids=1625450&cc=NZ
+#{
+#   "1625450": {
+#     "success": true,
+#     "data": []
+#   }
+# }
 
 # 10. use 76561198190514485 for testing
 
