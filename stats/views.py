@@ -35,6 +35,8 @@ def detail(request, steam_id):
         player_summary = services.get_steam_player_summary(steam_ids['steam64id'])
         player_level = services.get_steam_player_level(steam_ids['steam64id'])
         steam_data_owned_games = services.get_steam_user_owned_games(steam_ids['steam64id'])
+        # check if playtime = 0, then checkbox 'aways keep total playtime private'
+        # then order by price
         owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
 
         context = {
