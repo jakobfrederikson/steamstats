@@ -149,7 +149,6 @@ def get_game_information_from_db(owned_games: OwnedGamesDTO):
     appids = [game.appid for game in owned_games]
     
     existing_game_info = list(GameInformation.objects.filter(appid__in=appids))
-    print(existing_game_info)
 
     existing_appids = []
     for game_info in existing_game_info:
@@ -224,5 +223,7 @@ def _create_game_info_object_from_steam_store_api(owned_game_dto):
         last_updated=timezone.now()
     )
     game_info_obj.save()
+
+    print(f"[CREATE] Added game to DB {game_info_obj.name}")
 
     return game_info_obj
