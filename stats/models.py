@@ -62,8 +62,6 @@ class GameInformation(models.Model):
 
 
 class OwnedGamesDTO():
-    price_info: GamePrice
-
     def __init__(self, **kwargs):
         self.appid = kwargs.get("appid")
         self.name = kwargs.get("name")

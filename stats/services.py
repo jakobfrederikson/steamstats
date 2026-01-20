@@ -135,8 +135,7 @@ def sort_by_playtime(e: OwnedGamesDTO):
 # }
 
 # 10. use 76561198190514485 for testing
-
-def get_game_information_from_db(owned_games: OwnedGamesDTO):
+def get_users_game_information_from_db(owned_games: OwnedGamesDTO):
     """
     Returns a list of GameInformation objects found in the DB.
     Will also create a GameInformation object if one doesn't exist for it in the DB.
@@ -177,6 +176,11 @@ def get_game_information_from_db(owned_games: OwnedGamesDTO):
 
 
 def _create_game_info_object_from_steam_store_api(owned_game_dto):
+    """
+    Creates and returns a GameInformation object, combining data from the `owned_game_dto` param and the data from the store.steampowered.com/api/ response.
+    
+    :param owned_game_dto: An `OwnedGamesDTO` object.
+    """
     params = {
         'filters': 'price_overview',
         'appids': owned_game_dto.appid,
@@ -203,6 +207,8 @@ def _create_game_info_object_from_steam_store_api(owned_game_dto):
                     default_currency = price_overview['currency']
                     default_final_formatted = price_overview['final_formatted']
             else:
+                # if call was successful but there's no price_overview, 
+                # then the game is free
                 default_final_formatted = "FREE"
 
     game_info_obj = GameInformation (

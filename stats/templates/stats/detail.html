@@ -62,15 +62,15 @@
 
 <div class="row justify-content-center">
   <div class="col-md-8">
-    {% if empty_games %}
+    {% if not steam_data_owned_games %}
     <h6>[unknown] games in library</h6>    
     {% else %}
-    <h6>{{ owned_games|length }} games in library</h6>
+    <h6>{{ steam_data_owned_games|length }} games in library</h6>
     {% endif %}
   </div>
 </div>
 
-{% if empty_games %}
+{% if not steam_data_owned_games %}
 <div class="row justify-content-center">
   <div class="col-md-8">
     <p>Games list or profile is private, cannot display games list</p>
@@ -90,7 +90,7 @@
       </tr>
       </thead>
       <tbody>
-        {% for game in owned_games %}
+        {% for game in db_data_owned_games %}
           <tr class="align-middle">
             <td> 
               <img
@@ -98,9 +98,9 @@
               />
             </td>
             <td>{{ game.name }}</td>
-            <td>{{ game.playtime_forever }} hrs</td>
+            {% comment %} <td>{{ game.playtime_forever }} hrs</td> {% endcomment %}
             <td>{{ game.rtime_last_played }}</td> <!-- Can't get last_played anymore, change this to price/hour -->
-            <td>{{ game.price_info.final_formatted }}</td>
+            <td>{{ game.final_formatted }}</td>
           </tr>
         {% endfor %}
       </tbody>
