@@ -62,6 +62,8 @@ class GameInformation(models.Model):
 
 
 class OwnedGamesDTO():
+    game_information: GameInformation
+
     def __init__(self, **kwargs):
         self.appid = kwargs.get("appid")
         self.name = kwargs.get("name")
@@ -82,3 +84,11 @@ class OwnedGamesDTO():
     @classmethod
     def from_dict(cls, dict_obj):
         return cls(**dict_obj)
+    
+    @property
+    def price_per_hour(self):
+        if not self.game_information or self.playtime_forever <= 0:
+            return 0
+        if self.game_information.final_formatted == "FREE":
+            return 0
+        return round(float(self.game_information.price) / self.playtime_forever, 2)

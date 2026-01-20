@@ -35,14 +35,13 @@ def detail(request, steam_id):
         player_summary = services.get_steam_player_summary(steam_ids['steam64id'])
         player_level = services.get_steam_player_level(steam_ids['steam64id'])
         steam_data_owned_games = services.get_steam_user_owned_games(steam_ids['steam64id'])
-        db_data_owned_games = services.get_users_game_information_from_db(steam_data_owned_games)
+        owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
 
         context = {
             'player_summary': player_summary,
             'player_level': player_level,
             'steam_ids': steam_ids,
-            'steam_data_owned_games': steam_data_owned_games,
-            'db_data_owned_games': db_data_owned_games,
+            'games': owned_games_with_game_information
         }
         
         return render(request, 'stats/detail.html', context=context)

@@ -62,15 +62,15 @@
 
 <div class="row justify-content-center">
   <div class="col-md-8">
-    {% if not steam_data_owned_games %}
+    {% if not games %}
     <h6>[unknown] games in library</h6>    
     {% else %}
-    <h6>{{ steam_data_owned_games|length }} games in library</h6>
+    <h6>{{ games|length }} games in library</h6>
     {% endif %}
   </div>
 </div>
 
-{% if not steam_data_owned_games %}
+{% if not games %}
 <div class="row justify-content-center">
   <div class="col-md-8">
     <p>Games list or profile is private, cannot display games list</p>
@@ -85,12 +85,12 @@
         <th></th> <!--  Game picture via OwnedGamesDTO.appid -->
         <th>Name</th>
         <th>Playtime</th>
-        <th>Last played</th>
+        <th>Price/hour}</th>
         <th>Price</th>
       </tr>
       </thead>
       <tbody>
-        {% for game in db_data_owned_games %}
+        {% for game in games %}
           <tr class="align-middle">
             <td> 
               <img
@@ -98,9 +98,9 @@
               />
             </td>
             <td>{{ game.name }}</td>
-            {% comment %} <td>{{ game.playtime_forever }} hrs</td> {% endcomment %}
-            <td>{{ game.rtime_last_played }}</td> <!-- Can't get last_played anymore, change this to price/hour -->
-            <td>{{ game.final_formatted }}</td>
+            <td>{{ game.playtime_forever }} hrs</td>
+            <td>{{ game.price_per_hour }}</td>
+            <td>{{ game.game_information.final_formatted }}</td>
           </tr>
         {% endfor %}
       </tbody>
