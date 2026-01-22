@@ -36,15 +36,14 @@ def detail(request, steam_id):
         player_summary = services.get_steam_player_summary(steam_ids['steam64id'])
         player_level = services.get_steam_player_level(steam_ids['steam64id'])
         steam_data_owned_games = services.get_steam_user_owned_games(steam_ids['steam64id'])
+        owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
 
-        playtimes = [game.playtime_forever == 0 for game in steam_data_owned_games]
-        if all(playtimes):
+        playtimes_equal_zero = [game.playtime_forever == 0 for game in steam_data_owned_games]
+        if all(playtimes_equal_zero):
             possible_playtime_set_private = True
-            owned_games_with_game_information = steam_data_owned_games
-            owned_games_with_game_information.sort(key=sort_by_name)
+            owned_games_with_game_information.sort(key=sort_by_price, reversed=True)
         else:
-            possible_playtime_set_private = False
-            owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
+            possible_playtime_set_private = False        
 
         context = {
             'player_summary': player_summary,
@@ -64,5 +63,5 @@ def detail(request, steam_id):
 # ==================
 #     Helper(s)
 # ==================
-def sort_by_name(e: OwnedGamesDTO):
-    return e.name
+def sort_by_price(e: OwnedGamesDTO):
+    return e.game_information.price
