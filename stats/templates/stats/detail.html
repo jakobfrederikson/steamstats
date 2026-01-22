@@ -62,15 +62,15 @@
 
 <div class="row justify-content-center">
   <div class="col-md-8">
-    {% if empty_games %}
+    {% if not games %}
     <h6>[unknown] games in library</h6>    
     {% else %}
-    <h6>{{ owned_games|length }} games in library</h6>
+    <h6>{{ games|length }} games in library</h6>
     {% endif %}
   </div>
 </div>
 
-{% if empty_games %}
+{% if not games %}
 <div class="row justify-content-center">
   <div class="col-md-8">
     <p>Games list or profile is private, cannot display games list</p>
@@ -79,28 +79,30 @@
 {% else %}
 <div class="row justify-content-center">
   <div class="col-md-8">
+    {% if possible_playtime_set_private %}
+    <p>If you don't see any playtime/price information, you might have your playtime set to private in your steam profile.</p>
+    <p><a href="https://help.steampowered.com/en/faqs/view/588C-C67D-0251-C276" target="_blank">Check the Steam Profile Privacy page for more information.</a></p>
+    {% endif %}
     <table class="table table-hover" id="ownedGamesTable">
       <thead>
         <tr>
         <th></th> <!--  Game picture via OwnedGamesDTO.appid -->
         <th>Name</th>
         <th>Playtime</th>
-        <th>Last played</th>
+        <th>Price/hour</th>
         <th>Price</th>
       </tr>
       </thead>
       <tbody>
-        {% for game in owned_games %}
+        {% for game in games %}
           <tr class="align-middle">
             <td> 
-              <img
-                src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ game.appid }}/{{ game.img_icon_url }}.jpg"
-              />
+              <img src="{{ game.icon_url }}" />
             </td>
             <td>{{ game.name }}</td>
             <td>{{ game.playtime_forever }} hrs</td>
-            <td>{{ game.rtime_last_played }}</td>
-            <td>$00.00 nzd</td>
+            <td>{{ game.price_per_hour|default_if_none:"--" }}</td>
+            <td>{{ game.game_information.final_formatted|default_if_none:"--" }}</td>
           </tr>
         {% endfor %}
       </tbody>

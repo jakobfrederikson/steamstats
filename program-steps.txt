@@ -26,3 +26,11 @@ Program algorithm:
 
 
 my own ID (76561197999242706)
+
+
+
+
+Big update to dos:
+1. Edit model structure, get it right
+2. Edit initial POST request structure, make sure checks are done in order with clearly labelled function names
+3. 
