@@ -4,6 +4,7 @@ from django.utils import timezone
 from .models import PlayerSummaryDTO, OwnedGamesDTO, GameInformation
 
 import requests
+import time
 
 steam_api_key = settings.STEAM_API_KEY
 format = "json"
@@ -33,7 +34,8 @@ def get_steam_player_summary(steam_id64):
         return player_summary_dto
     else:
         return response.status_code
-    
+
+
 def get_steam_player_level(steam_id64):
     """
     Returns a an `int player_level` produced by the JSON response of IPlayerService/GetSteamLevel/v1/.
@@ -54,7 +56,8 @@ def get_steam_player_level(steam_id64):
         return player_level
     else:
         return response.status_code
-    
+
+
 def get_steam_user_owned_games(steam_id64):
     """
     Returns a list of `OwnedGamesDTO` objects produced by the JSON response from the Steam API call for IPlayerService/GetOwnedGames/v0001/.
@@ -77,14 +80,14 @@ def get_steam_user_owned_games(steam_id64):
 
         # If user's profile is private, return empty
         if json_response == {"response": {}}:
-            return {}
+            return []
 
         owned_games_dtos = []
         
         for game in json_response['response']['games']:
             owned_games_dtos.append(OwnedGamesDTO.from_dict(game))
 
-        owned_games_dtos.sort(reverse=True, key=sort_by_playtime)
+        owned_games_dtos.sort(key=sort_by_playtime, reverse=True)
 
         return owned_games_dtos
     else:
@@ -95,46 +98,7 @@ def sort_by_playtime(e: OwnedGamesDTO):
     return e.playtime_forever
 
 
-# Possibly split this function into multiple code pieces
-# Possibly also - delete DB and start again with the following ideals:
-# 1. Check if game data exists in DB
-# 2. If can't find the appid - then request it via the steam store
-# 3. We need to add the following information:
-# 4. Game name, Appid, Price, Currency, final_formatted, last_updated
-
-# 5. This requires getting data from the OwnedGamesDTO:
-# 6. appid, name, img_icon_url
-
-# 7. And combining with the steamstore call:
-# 8. price, currecny, final_formatted, last_updated <- locally done in the function i guess
-
-# 9. If a game is free (find out how to find this), mark it in db as 'free'
-# 9a. It looks like if a game is free, and we request steam store data, it returns the following:
-# Example for marvel rivals: https://store.steampowered.com/api/appdetails?filters=price_overview&appids=2767030&cc=NZ
-# {
-#   "2767030": {
-#     "success": true,
-#     "data": []
-#   }
-# }
-#
-# Example for CS2: https://store.steampowered.com/api/appdetails?filters=price_overview&appids=730&cc=NZ
-#{
-#   "730": {
-#     "success": true,
-#     "data": []
-#   }
-# }
-#
-# Example for Muck: https://store.steampowered.com/api/appdetails?filters=price_overview&appids=1625450&cc=NZ
-#{
-#   "1625450": {
-#     "success": true,
-#     "data": []
-#   }
-# }
-
-# 10. use 76561198190514485 for testing
+# use 76561198190514485 for testing
 def get_game_information_from_db(owned_games: OwnedGamesDTO):
     """
     Returns a list of `OwendGamesDTO` objects with GameInformation attached.
@@ -160,14 +124,16 @@ def get_game_information_from_db(owned_games: OwnedGamesDTO):
             missing_appids.append(appid)
 
     # ====================================================================
-    # [ If missing_appids has data, then some games that the user has 
+    #   If missing_appids has data, then some games that the user has 
     #   are not in our DB. So we query the steam store API and store the
-    #   data.]
+    #   data.
     # ====================================================================
     if missing_appids:
         missing_owned_game_dtos = [game for game in owned_games if game.appid in missing_appids]
         for game in missing_owned_game_dtos:
             existing_game_info.append(_create_game_info_object_from_steam_store_api(game))
+            # Sleep for 0.5 seconds before next API call, so we don't get IP banned
+            time.sleep(0.5)
 
     info_map = {info.appid: info for info in existing_game_info}
 
@@ -177,7 +143,7 @@ def get_game_information_from_db(owned_games: OwnedGamesDTO):
     return owned_games
 
 
-def _create_game_info_object_from_steam_store_api(owned_game_dto):
+def _create_game_info_object_from_steam_store_api(owned_game_dto: OwnedGamesDTO):
     """
     Creates and returns a GameInformation object, combining data from the `owned_game_dto` param and the data from the store.steampowered.com/api/ response.
     
@@ -213,9 +179,12 @@ def _create_game_info_object_from_steam_store_api(owned_game_dto):
                 # then the game is free
                 default_final_formatted = "FREE"
 
+
+    img_icon_url = f"https://media.steampowered.com/steamcommunity/public/images/apps/{owned_game_dto.appid}/{owned_game_dto.img_icon_url}.jpg"
+
     game_info_obj = GameInformation (
         name=owned_game_dto.name,
-        img_icon_url=owned_game_dto.img_icon_url,
+        img_icon_url=img_icon_url,
         appid=owned_game_dto.appid,
         price=default_price,
         currency=default_currency,
@@ -224,6 +193,6 @@ def _create_game_info_object_from_steam_store_api(owned_game_dto):
     )
     game_info_obj.save()
 
-    print(f"[CREATE] Added game to DB {game_info_obj.name}")
+    print(f"[CREATE] Added game to DB - {game_info_obj.name}")
 
     return game_info_obj

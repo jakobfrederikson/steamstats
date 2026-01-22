@@ -2,11 +2,6 @@ from django.db import models
 
 import datetime as dt
 
-# Create your models here.
-
-# ===========================
-# [          DTOs           ]
-# ===========================
 class PlayerSummaryDTO():
     def __init__(self, **kwargs):
         self.steamid = kwargs.get("steamid")
@@ -92,3 +87,9 @@ class OwnedGamesDTO():
         if self.game_information.final_formatted == "FREE":
             return 0
         return round(float(self.game_information.price) / self.playtime_forever, 2)
+    
+    @property
+    def icon_url(self):
+        if self.game_information and self.game_information.img_icon_url:
+            return self.game_information.img_icon_url
+        return f"https://media.steampowered.com/steamcommunity/public/images/apps/{self.appid}/{self.img_icon_url}.jpg"

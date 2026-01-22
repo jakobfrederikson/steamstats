@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 
 from stats import services
 from .forms import SteamIDForm
+from .models import OwnedGamesDTO
 
 from stats.SteamIDConverterPython.SteamID import SteamID, InvalidSteamID
 
@@ -35,15 +36,22 @@ def detail(request, steam_id):
         player_summary = services.get_steam_player_summary(steam_ids['steam64id'])
         player_level = services.get_steam_player_level(steam_ids['steam64id'])
         steam_data_owned_games = services.get_steam_user_owned_games(steam_ids['steam64id'])
-        # check if playtime = 0, then checkbox 'aways keep total playtime private'
-        # then order by price
-        owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
+
+        playtimes = [game.playtime_forever == 0 for game in steam_data_owned_games]
+        if all(playtimes):
+            possible_playtime_set_private = True
+            owned_games_with_game_information = steam_data_owned_games
+            owned_games_with_game_information.sort(key=sort_by_name)
+        else:
+            possible_playtime_set_private = False
+            owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
 
         context = {
             'player_summary': player_summary,
             'player_level': player_level,
             'steam_ids': steam_ids,
-            'games': owned_games_with_game_information
+            'games': owned_games_with_game_information,
+            'possible_playtime_set_private': possible_playtime_set_private,
         }
         
         return render(request, 'stats/detail.html', context=context)
@@ -51,3 +59,10 @@ def detail(request, steam_id):
         # send back to index advising Steam ID not valid
         pass
     return render(request, "index.html", context=context)
+
+
+# ==================
+#     Helper(s)
+# ==================
+def sort_by_name(e: OwnedGamesDTO):
+    return e.name

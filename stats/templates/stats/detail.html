@@ -79,13 +79,17 @@
 {% else %}
 <div class="row justify-content-center">
   <div class="col-md-8">
+    {% if possible_playtime_set_private %}
+    <p>If you don't see any playtime/price information, you might have your playtime set to private in your steam profile.</p>
+    <p><a href="https://help.steampowered.com/en/faqs/view/588C-C67D-0251-C276" target="_blank">Check the Steam Profile Privacy page for more information.</a></p>
+    {% endif %}
     <table class="table table-hover" id="ownedGamesTable">
       <thead>
         <tr>
         <th></th> <!--  Game picture via OwnedGamesDTO.appid -->
         <th>Name</th>
         <th>Playtime</th>
-        <th>Price/hour}</th>
+        <th>Price/hour</th>
         <th>Price</th>
       </tr>
       </thead>
@@ -93,14 +97,12 @@
         {% for game in games %}
           <tr class="align-middle">
             <td> 
-              <img
-                src="https://media.steampowered.com/steamcommunity/public/images/apps/{{ game.appid }}/{{ game.img_icon_url }}.jpg"
-              />
+              <img src="{{ game.icon_url }}" />
             </td>
             <td>{{ game.name }}</td>
             <td>{{ game.playtime_forever }} hrs</td>
-            <td>{{ game.price_per_hour }}</td>
-            <td>{{ game.game_information.final_formatted }}</td>
+            <td>{{ game.price_per_hour|default_if_none:"--" }}</td>
+            <td>{{ game.game_information.final_formatted|default_if_none:"--" }}</td>
           </tr>
         {% endfor %}
       </tbody>
