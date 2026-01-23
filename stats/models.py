@@ -55,6 +55,12 @@ class GameInformation(models.Model):
     final_formatted = models.CharField()
     last_updated = models.DateTimeField()
 
+    @property
+    def icon_url(self):
+        if self.img_icon_url:
+            return self.img_icon_url
+        return f"https://media.steampowered.com/steamcommunity/public/images/apps/{self.appid}/{self.img_icon_url}.jpg"
+
 
 class OwnedGamesDTO():
     game_information: GameInformation
@@ -86,7 +92,7 @@ class OwnedGamesDTO():
             return 0
         if self.game_information.final_formatted == "FREE":
             return 0
-        return round(float(self.game_information.price) / self.playtime_forever, 2)
+        return max(0, min(round(float(self.game_information.price) / self.playtime_forever, 2), self.game_information.price))
     
     @property
     def icon_url(self):
