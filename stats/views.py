@@ -57,7 +57,7 @@ def detail(request, steam_id):
     except InvalidSteamID:
         # send back to index advising Steam ID not valid
         pass
-    return render(request, "index.html", context=context)
+    return render(request, "stats/index.html", context=context)
 
 
 # ==================
