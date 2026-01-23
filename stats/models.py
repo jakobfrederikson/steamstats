@@ -55,6 +55,12 @@ class GameInformation(models.Model):
     final_formatted = models.CharField()
     last_updated = models.DateTimeField()
 
+    @property
+    def icon_url(self):
+        if self.img_icon_url:
+            return self.img_icon_url
+        return f"https://media.steampowered.com/steamcommunity/public/images/apps/{self.appid}/{self.img_icon_url}.jpg"
+
 
 class OwnedGamesDTO():
     game_information: GameInformation
