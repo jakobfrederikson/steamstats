@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+{% block title_status %}Database | {% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="text-center">Basic Steam Stats Database</h1>
+        <p>If you use the steam stats generator, and our database doesn't already have the game, then we need to store the games information in our database to help run the app faster.</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h6>{{ games|length }} games in database</h6>
+        </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <table class="table table-hover" id="ownedGamesTable" data-toggle="table" data-search="true" data-pagination="true">
+                    <thead>
+                        <tr>
+                        <th><i class="bi bi-card-image"></i></th>
+                        <th data-sortable="true" data-field="id">AppID</th>
+                        <th data-sortable="true" data-field="name">Name</th>
+                        {% comment %} <th data-sortable="true" data-field="basic-stats-hits">Unique Hits (on this site)</th> {% endcomment %}
+                        <th data-sortable="true" data-field="playtime">Price</th>
+                        <th data-sortable="true" data-field="price_hour">Last Updated</th>
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for game in games %}
+                        <tr class="align-middle">
+                            <td> 
+                            <img src="{{ game.icon_url }}" />
+                            </td>
+                            <td>{{ game.appid }}</td>
+                            <td>{{ game.name }}</td>
+                            {% comment %} <td>{{ game.unique_hit }}</td> {% endcomment %}
+                            <td>{{ game.final_formatted }} hrs</td>
+                            <td>{{ game.last_updated }}</td>                
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

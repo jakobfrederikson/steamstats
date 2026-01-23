@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from stats import services
 from .forms import SteamIDForm
-from .models import OwnedGamesDTO
+from .models import OwnedGamesDTO, GameInformation
 
 from stats.SteamIDConverterPython.SteamID import SteamID, InvalidSteamID
 
@@ -58,6 +58,12 @@ def detail(request, steam_id):
         # send back to index advising Steam ID not valid
         pass
     return render(request, "stats/index.html", context=context)
+
+
+def database(request):
+    games = GameInformation.objects.all()
+    context = { 'games': games}
+    return render(request, "stats/database.html", context=context)
 
 
 # ==================
