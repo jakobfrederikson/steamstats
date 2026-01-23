@@ -83,14 +83,15 @@
     <p>If you don't see any playtime/price information, you might have your playtime set to private in your steam profile.</p>
     <p><a href="https://help.steampowered.com/en/faqs/view/588C-C67D-0251-C276" target="_blank">Check the Steam Profile Privacy page for more information.</a></p>
     {% endif %}
-    <table class="table table-hover" id="ownedGamesTable">
+    <table class="table table-hover" id="ownedGamesTable" data-toggle="table" data-search="true" data-pagination="true">
       <thead>
         <tr>
-        <th></th> <!--  Game picture via OwnedGamesDTO.appid -->
-        <th>Name</th>
-        <th>Playtime</th>
-        <th>Price/hour</th>
-        <th>Price</th>
+        <th><i class="bi bi-card-image"></i></th> <!--  Game picture via OwnedGamesDTO.appid -->
+        <th data-sortable="true" data-field="id">AppID</th>
+        <th data-sortable="true" data-field="name">Name</th>
+        <th data-sortable="true" data-field="playtime">Playtime</th>
+        <th data-sortable="true" data-field="price_hour">Price/hour</th>
+        <th data-sortable="true" data-field="price">Price</th>
       </tr>
       </thead>
       <tbody>
@@ -99,6 +100,7 @@
             <td> 
               <img src="{{ game.icon_url }}" />
             </td>
+            <td>{{ game.appid }}</td>
             <td>{{ game.name }}</td>
             <td>{{ game.playtime_forever }} hrs</td>
             <td>{{ game.price_per_hour|default_if_none:"--" }}</td>
