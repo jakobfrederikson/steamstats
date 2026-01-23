@@ -86,7 +86,7 @@ class OwnedGamesDTO():
             return 0
         if self.game_information.final_formatted == "FREE":
             return 0
-        return round(float(self.game_information.price) / self.playtime_forever, 2)
+        return max(0, min(round(float(self.game_information.price) / self.playtime_forever, 2), self.game_information.price))
     
     @property
     def icon_url(self):
