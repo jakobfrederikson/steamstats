@@ -134,6 +134,7 @@ def get_game_information_from_db(owned_games: OwnedGamesDTO):
             existing_game_info.append(_create_game_info_object_from_steam_store_api(game))
             # Sleep for 0.5 seconds before next API call, so we don't get IP banned
             time.sleep(0.5)
+    # ====================================================================
 
     info_map = {info.appid: info for info in existing_game_info}
 
