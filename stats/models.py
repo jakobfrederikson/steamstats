@@ -60,6 +60,22 @@ class GameInformation(models.Model):
         if self.img_icon_url:
             return self.img_icon_url
         return f"https://media.steampowered.com/steamcommunity/public/images/apps/{self.appid}/{self.img_icon_url}.jpg"
+    
+    @property
+    def unique_hits_count(self) -> int:
+       return self.unique_hits.count()
+
+
+class UniqueGameHit(models.Model):
+    game = models.ForeignKey(
+        GameInformation,
+        on_delete=models.CASCADE,
+        related_name='unique_hits'
+    )
+    steam64id = models.CharField()
+
+    class Meta:
+        unique_together = ('game', 'steam64id')
 
 
 class OwnedGamesDTO():

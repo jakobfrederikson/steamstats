@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from stats import services
 from .forms import SteamIDForm
-from .models import OwnedGamesDTO, GameInformation
+from .models import OwnedGamesDTO, GameInformation, UniqueGameHit
 
 from stats.SteamIDConverterPython.SteamID import SteamID, InvalidSteamID
 
@@ -36,14 +37,21 @@ def detail(request, steam_id):
         player_summary = services.get_steam_player_summary(steam_ids['steam64id'])
         player_level = services.get_steam_player_level(steam_ids['steam64id'])
         steam_data_owned_games = services.get_steam_user_owned_games(steam_ids['steam64id'])
+
         owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
 
-        playtimes_equal_zero = [game.playtime_forever == 0 for game in steam_data_owned_games]
+        for game in owned_games_with_game_information:
+            UniqueGameHit.objects.get_or_create(
+                game = game.game_information,
+                steam64id=steam_ids['steam64id']
+            )
+
+        playtimes_equal_zero = [game.playtime_forever == 0 for game in owned_games_with_game_information]
         if all(playtimes_equal_zero):
             possible_playtime_set_private = True
             owned_games_with_game_information.sort(key=sort_by_price, reversed=True)
         else:
-            possible_playtime_set_private = False        
+            possible_playtime_set_private = False
 
         context = {
             'player_summary': player_summary,
