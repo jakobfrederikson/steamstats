@@ -20,15 +20,14 @@
                 <table class="table table-hover" id="ownedGamesTable" data-toggle="table" data-search="true" data-pagination="true">
                     <thead>
                         <tr>
-                        <th><i class="bi bi-card-image"></i></th>
-                        <th data-sortable="true" data-field="id">DB ID</th>
-                        <th data-sortable="true" data-field="appid">App ID</th>
-                        <th data-sortable="true" data-field="name">Name</th>
-                        <th data-sortable="true" data-field="playtime">Price</th>
-                        <th data-sortable="true" data-field="basic-stats-hits">Unique Hits</th>
-                        <th data-sortable="true" data-field="price_hour">Last Updated</th>
-                        
-                    </tr>
+                            <th><i class="bi bi-card-image"></i></th>
+                            <th data-sortable="true" data-field="id">DB ID</th>
+                            <th data-sortable="true" data-field="appid">App ID</th>
+                            <th data-sortable="true" data-field="name">Name</th>
+                            <th data-sortable="true" data-field="playtime">Price</th>
+                            <th data-sortable="true" data-field="basic-stats-hits">Unique Hits</th>
+                            <th data-sortable="true" data-field="price_hour">Last Updated</th>                        
+                        </tr>
                     </thead>
                     <tbody>
                         {% for game in games %}

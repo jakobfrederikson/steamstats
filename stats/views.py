@@ -53,10 +53,20 @@ def detail(request, steam_id):
         else:
             possible_playtime_set_private = False
 
+        total_hours_played = 0
+        total_dollars_spent = 0
+        for game in owned_games_with_game_information:
+            total_hours_played += game.playtime_forever
+            total_dollars_spent += game.game_information.price
+
+        total_hours_played = round(total_hours_played, 2)
+
         context = {
             'player_summary': player_summary,
             'player_level': player_level,
             'steam_ids': steam_ids,
+            'total_hours_played': total_hours_played,
+            'total_dollars_spent': total_dollars_spent,
             'games': owned_games_with_game_information,
             'possible_playtime_set_private': possible_playtime_set_private,
         }
@@ -70,7 +80,7 @@ def detail(request, steam_id):
 
 def database(request):
     games = GameInformation.objects.all()
-    context = { 'games': games}
+    context = { 'games': games }
     return render(request, "stats/database.html", context=context)
 
 

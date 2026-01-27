@@ -60,14 +60,28 @@
 
 <br />
 
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    {% if not games %}
-    <h6>[unknown] games in library</h6>    
-    {% else %}
-    <h6>{{ games|length }} games in library</h6>
-    {% endif %}
+<div class="row justify-content-center align-items-center text-center g3">
+  {% if games %}
+  <div class="col-xl-3 col-md-6">
+    <div class="card text-white mb-4" style="background-color: var(--bs-dark-bg-subtle)">
+      <div class="card-body"><strong>{{ games|length }} games in library</strong></div>
+    </div>
   </div>
+
+  <div class="col-xl-3 col-md-6">
+    <div class="card text-white mb-4" style="background-color: var(--bs-dark-bg-subtle)">
+      <div class="card-body"><strong>{{ total_hours_played }} hours played</strong></div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+    <div class="card text-white mb-4" style="background-color: var(--bs-dark-bg-subtle)">
+      <div class="card-body"><strong>~ NZ$ {{ total_dollars_spent }} spent</strong></div>
+    </div>
+  </div>
+  {% else %}
+  <h6>[unknown] games in library</h6>
+  {% endif %}
 </div>
 
 {% if not games %}
@@ -91,7 +105,7 @@
         <th data-sortable="true" data-field="name">Name</th>
         <th data-sortable="true" data-field="playtime">Playtime (hours)</th>
         <th data-sortable="true" data-field="price_hour">Price/hour</th>
-        <th data-sortable="true" data-field="price">Price</th>
+        <th data-sortable="true" data-field="price">Price (NZD)</th>
       </tr>
       </thead>
       <tbody>
@@ -104,7 +118,11 @@
             <td>{{ game.name }}</td>
             <td>{{ game.playtime_forever }}</td>
             <td>{{ game.price_per_hour|default_if_none:"--" }}</td>
-            <td>{{ game.game_information.final_formatted|default_if_none:"--" }}</td>
+            {% if game.game_information.price == 0.00 %}
+            <td>0.00 (FREE)</td>
+            {% else %}
+            <td>{{ game.game_information.price|default_if_none:"--" }}</td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>
