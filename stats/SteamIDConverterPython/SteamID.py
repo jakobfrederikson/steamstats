@@ -81,7 +81,7 @@ class SteamID:
             # either steamid3 or steamid
             if any_steamid.startswith("steam_"):
                 # this is a steam id
-                any_steamid.replace("steam_", "")
+                any_steamid = any_steamid.replace("steam_", "")
                 steamid_parts = any_steamid.split(":")
 
                 self.x = steamid_parts[0]
@@ -92,20 +92,20 @@ class SteamID:
 
             if any_steamid.startswith("["):
                 # this is a steam id3
-                any_steamid.replace("[", "")
-                any_steamid.replace("]", "")
-                any_steamid.replace("u:", "")
+                any_steamid = any_steamid.replace("[", "")
+                any_steamid = any_steamid.replace("]", "")
+                any_steamid = any_steamid.replace("u:", "")
                 steamid_parts = any_steamid.split(":")
                 self.x = 0
                 self.y = steamid_parts[0]
-                self.z = int( (steamid_parts[1] - self.y) / 2 )
+                self.z = int( (int(steamid_parts[1]) - int(self.y)) / 2 )
             
             if any_steamid.startswith("u"):
-                any_steamid.replace("u:", "")
+                any_steamid = any_steamid.replace("u:", "")
                 steamid_parts = any_steamid.split(":")
                 self.x = 0
                 self.y = steamid_parts[0]
-                self.z = int( (steamid_parts[1] - self.y) / 2 )
+                self.z = int( (int(steamid_parts[1]) - int(self.y)) / 2 )
 
         except Exception:
             raise InvalidSteamID
