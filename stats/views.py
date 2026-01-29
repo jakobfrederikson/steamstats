@@ -49,7 +49,7 @@ def detail(request, steam_id):
         playtimes_equal_zero = [game.playtime_forever == 0 for game in owned_games_with_game_information]
         if all(playtimes_equal_zero):
             possible_playtime_set_private = True
-            owned_games_with_game_information.sort(key=sort_by_price, reversed=True)
+            owned_games_with_game_information.sort(key=sort_by_price, reverse=True)
         else:
             possible_playtime_set_private = False
 

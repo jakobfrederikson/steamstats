@@ -35,7 +35,8 @@ def get_steam_player_summary(steam_id64):
     else:
         return response.status_code
 
-
+# zedar: 76561198080740269
+# jonux: 76561198345057403
 def get_steam_player_level(steam_id64):
     """
     Returns a an `int player_level` produced by the JSON response of IPlayerService/GetSteamLevel/v1/.
@@ -52,7 +53,10 @@ def get_steam_player_level(steam_id64):
 
     if response.status_code == requests.codes.ok:
         json_response = response.json()
-        player_level = int(json_response['response']['player_level'])
+        if 'player_level' in json_response['response']:
+            player_level = int(json_response['response']['player_level'])
+        else:
+            player_level = 0
         return player_level
     else:
         return response.status_code
