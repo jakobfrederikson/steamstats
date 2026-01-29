@@ -9,9 +9,39 @@ import time
 steam_api_key = settings.STEAM_API_KEY
 format = "json"
 
+
 # TODO:
 # 1. add support for https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=steam_api_key&vanityurl={UsersCustomURL}
-# 2. response looks as so: {"response":{"steamid":"76561198087999365","success":1}}
+# 2. Good response:
+#    {"response":{"steamid":"76561198087999365","success":1}}
+# 3. Bad response:
+#    {"response":{"success":42,"message":"No match"}}
+def try_get_steam_id_from_custom_url(vanity_url):
+    """
+    Returns a steam_id64 or 
+    
+    :param vanity_url: Maybe the user's custom URL to their steam page.
+    """
+    params = {
+        'key': steam_api_key,
+        'vanityurl': vanity_url,
+    }
+
+    response = requests.get('https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/', params)
+
+    if response.status_code == requests.codes.ok:
+        json_response = response.json()['response']
+
+        if json_response['success'] == 1:
+            # return steam_id64
+            return json_response['steamid']
+        # no match
+        elif json_response['success'] == 42:
+            return json_response['message']
+        else:
+            return "Unknown error attempting to retrieve steam id from custom URL"
+
+
 def get_steam_player_summary(steam_id64):
     """
     Returns a `PlayerSummaryDTO` object produced by the JSON response of ISteamUser/GetPlayerSummaries/v0002/.
