@@ -23,12 +23,12 @@
                     <thead>
                         <tr>
                             <th><i class="bi bi-card-image"></i></th>
-                            <th data-sortable="true" data-field="id">DB ID</th>
-                            <th data-sortable="true" data-field="appid">App ID</th>
+                            <th data-sortable="true" data-field="dbid">DB ID</th>
+                            <th data-sortable="true" data-field="appid">AppID</th>
                             <th data-sortable="true" data-field="name">Name</th>
-                            <th data-sortable="true" data-field="playtime">Price</th>
-                            <th data-sortable="true" data-field="basic-stats-hits">Unique Hits</th>
-                            <th data-sortable="true" data-field="price_hour">Last Updated</th>                        
+                            <th data-sortable="true" data-field="price">Price (NZD)</th>
+                            <th data-sortable="true" data-field="unique_hits">Unique Hits</th>
+                            <th data-sortable="true" data-field="last_updated">Last Updated</th>                        
                         </tr>
                     </thead>
                     <tbody>
@@ -40,7 +40,11 @@
                             <td>{{ game.id }}</td>
                             <td>{{ game.appid }}</td>
                             <td><a href="https://store.steampowered.com/app/{{ game.appid }}/" target="_blank">{{ game.name }}</td>
-                            <td>{{ game.final_formatted }}</td>
+                            {% if game.price == 0.00 %}
+                            <td>0.00 (FREE)</td>
+                            {% else %}
+                            <td>{{ game.price|default_if_none:"--" }}</td>
+                            {% endif %}
                             <td>{{ game.unique_hits_count }}</td>
                             <td>{{ game.last_updated }}</td>                
                         </tr>

@@ -95,6 +95,13 @@ def database(request):
     return render(request, "stats/database.html", context=context)
 
 
+def find_steam_id(request):
+    return render(request, "stats/find_your_steam_id.html")
+
+
+def about(request):
+    return render(request, "stats/about.html")
+
 # ==================
 #     Helper(s)
 # ==================
