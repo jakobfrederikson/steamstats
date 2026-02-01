@@ -5,7 +5,28 @@
 <div class="row justify-content-center mt-4">
     <div class="col-md-8">
         <h1 class="text-center">How to find your Steam ID</h1>
-        <p>Go to your steam profile and find the ID bruh.</p>
+        <br/>
+        <h2>1. Using a browser</h2>
+        <ol>
+            <li>Open <a href="https://steamcommunity.com/" target="_blank">Steam</a> community in a browser, and sign in.</li>
+            <li>After signing in, click on your picture in the top right hand corner to open your steam profile.</li>
+            <li>Copy the numbers after <code>/profiles/</code>, this is your Steam ID.
+                <br/>
+                {% load static %}
+                <img src="{% static 'stats/steam-url-screenshot.png' %}">
+                <p><small><em>Don't worry if yours looks different, this means you created a <code>vanity url</code> in your steam profile settings at some point. This will still work.</em></small></p>
+            </li>
+            <li>Go back to the <a href="{% url 'index' %}">home page</a> and paste your steam ID.</li>
+        </ol>
+        <br/>
+        <h2>2. Using Steam mobile</h2>
+        <ol>
+            <li>Open Steam on your phone (and of course, be logged in).</li>
+            <li>Tap your proifle photo in the top right corner.</li>
+            <li>Scroll down and look for the <strong>Account Details</strong> page.</li>
+            <li>After opening your account details, look directly under where it says <code>{your steam account name}'s Account</code>. You will see 'Steam ID:'.
+            <li>Go back to the <a href="{% url 'index' %}">home page</a> on this website and type in your steam ID.</li>
+        </ol>
     </div>
 </div>
 
