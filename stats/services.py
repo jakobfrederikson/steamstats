@@ -59,8 +59,7 @@ def get_steam_player_summary(steam_id64):
     else:
         return response.status_code
 
-# zedar: 76561198080740269
-# jonux: 76561198345057403
+
 def get_steam_player_level(steam_id64):
     """
     Returns a an `int player_level` produced by the JSON response of IPlayerService/GetSteamLevel/v1/.
@@ -126,7 +125,6 @@ def sort_by_playtime(e: OwnedGamesDTO):
     return e.playtime_forever
 
 
-# use 76561198190514485 for testing
 def get_game_information_from_db(owned_games: OwnedGamesDTO):
     """
     Returns a list of `OwendGamesDTO` objects with GameInformation attached.
@@ -222,6 +220,6 @@ def _create_game_info_object_from_steam_store_api(owned_game_dto: OwnedGamesDTO)
     )
     game_info_obj.save()
 
-    print(f"[CREATE] Added game to DB - {game_info_obj.name}")
+    #print(f"[CREATE] Added game to DB - {game_info_obj.name}")
 
     return game_info_obj

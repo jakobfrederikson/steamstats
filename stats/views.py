@@ -32,10 +32,8 @@ def detail(request, steam_id):
         steam_ids['steamid3'] = steam_id_obj.get_steam_id3()
         steam_ids['steam32id'] = steam_id_obj.get_steam32_id()
         steam_ids['steam64id'] = steam_id_obj.get_steam64_id()
-        print(f"Good SteamID {steam_id}")
     # Maybe user input their custom steam URL instead of their SteamID, so try and get that.
     except InvalidSteamID:
-        print(f"Bad SteamID {steam_id}")
         try:
             steam_id_from_custom_url = services.try_get_steam_id_from_custom_url(steam_id)
             steam_id_obj = SteamID(steam_id_from_custom_url)
@@ -43,7 +41,6 @@ def detail(request, steam_id):
             steam_ids['steamid3'] = steam_id_obj.get_steam_id3()
             steam_ids['steam32id'] = steam_id_obj.get_steam32_id()
             steam_ids['steam64id'] = steam_id_obj.get_steam64_id()
-            print(f"Good SteamID found from custom URL: {steam_id} - {steam_ids['steamid']}")
         # If we still can't get a valid SteamID, then user probably input something that is not a SteamID
         except InvalidSteamID:
             return redirect('index')
@@ -55,10 +52,16 @@ def detail(request, steam_id):
     owned_games_with_game_information = services.get_game_information_from_db(steam_data_owned_games)
 
     for game in owned_games_with_game_information:
-        UniqueGameHit.objects.get_or_create(
+        obj, created = UniqueGameHit.objects.get_or_create(
             game = game.game_information,
             steam64id=steam_ids['steam64id']
         )
+
+        # if a new unique game hit was created, then update 'last_updated' to now in game_information table
+        if created:
+            game_info_obj = obj.game
+            game_info_obj.last_updated = timezone.now()
+            game_info_obj.save(update_fields=["last_updated"])
 
     playtimes_equal_zero = [game.playtime_forever == 0 for game in owned_games_with_game_information]
     if all(playtimes_equal_zero):
@@ -98,9 +101,6 @@ def database(request):
 def find_steam_id(request):
     return render(request, "stats/find_your_steam_id.html")
 
-
-def about(request):
-    return render(request, "stats/about.html")
 
 # ==================
 #     Helper(s)
