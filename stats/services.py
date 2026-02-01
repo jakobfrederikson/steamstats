@@ -10,12 +10,6 @@ steam_api_key = settings.STEAM_API_KEY
 format = "json"
 
 
-# TODO:
-# 1. add support for https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=steam_api_key&vanityurl={UsersCustomURL}
-# 2. Good response:
-#    {"response":{"steamid":"76561198087999365","success":1}}
-# 3. Bad response:
-#    {"response":{"success":42,"message":"No match"}}
 def try_get_steam_id_from_custom_url(vanity_url):
     """
     Returns a steam_id64 or 

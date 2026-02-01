@@ -20,3 +20,10 @@ main {
     flex: 1;
 }
 
+.test {
+    text-decoration: none;
+}
+
+.test:hover {
+    text-decoration: underline;
+}
