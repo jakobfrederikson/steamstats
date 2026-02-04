@@ -10,29 +10,65 @@
 
 <div class="row mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h6>{{ games|length }} games in database</h6>
+        <div class="col-md-10">
+            {% if search_query %}
+            <h6>{{ games_list|length }} results for {{ search_query }} in database.</h6>
+            {% else %}
+            <h6>{{ games_list|length }} games in database</h6>
+            {% endif %}
         </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <table class="table table-hover" id="ownedGamesTable" data-toggle="table" data-search="true" data-pagination="true">
+            <div class="col-md-10">
+                {% if is_paginated %}
+                    <div class="pagination">
+                        <span class="page-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                            {% endif %}
+                            <span class="page-current">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                            </span>
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endif %}
+                <form method="GET" action"">
+                    <input class="form-control" type="text" name="q" placeholder="Search database...">
+                    <button class="btn btn-primary" type="Submit">Search</button>
+                </form>
+                <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th><i class="bi bi-card-image"></i></th>
-                            <th data-sortable="true" data-field="dbid">DB ID</th>
-                            <th data-sortable="true" data-field="appid">AppID</th>
-                            <th data-sortable="true" data-field="name">Name</th>
-                            <th data-sortable="true" data-field="price">Price (NZD)</th>
-                            <th data-sortable="true" data-field="unique_hits">Unique Hits</th>
-                            <th data-sortable="true" data-field="last_updated">Last Updated</th>                        
+                            <th>
+                                <a href="?q={{ search_query }}&column=id">DB ID</a>
+                            </th>
+                            <th>
+                                <a href="?q={{ search_query }}&column=appid">AppID</a>
+                            </th>
+                            <th>
+                                <a href="?q={{ search_query }}&column=name">Name</a>
+                            </th>
+                            <th>
+                                <a href="?q={{ search_query }}&column=price">Price (NZD)</a>
+                            </th>
+                            <th>Unique Hits</th>
+                            <th>
+                                <a href="?q={{ search_query }}&column=last_updated">Name</a>
+                            </th>   
                         </tr>
                     </thead>
                     <tbody>
-                        {% for game in games %}
+                    {% if games_list %}
+                        {% for game in games_list %}
                         <tr class="align-middle">
                             <td> 
-                            <img src="{{ game.icon_url }}" />
+                                <img src="{{ game.icon_url }}" />
                             </td>
                             <td>{{ game.id }}</td>
                             <td>{{ game.appid }}</td>
@@ -46,11 +82,31 @@
                             <td>{{ game.last_updated }}</td>                
                         </tr>
                         {% endfor %}
-                    </tbody>
+                    {% else %}
+                        <p>There are no games in the database.</p>
+                    {% endif %}
+                    </tbody>                    
                 </table>
+                {% if is_paginated %}
+                    <div class="pagination">
+                        <span class="page-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                            {% endif %}
+                            <span class="page-current">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                            </span>
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
-
 {% endblock%}
+
