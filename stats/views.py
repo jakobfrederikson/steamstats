@@ -1,4 +1,6 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.views import generic
 from django.utils import timezone
 
 from stats import services
@@ -92,11 +94,38 @@ def detail(request, steam_id):
     return render(request, 'stats/detail.html', context=context)
 
 
-def database(request):
-    games = GameInformation.objects.all()
-    context = { 'games': games }
-    return render(request, "stats/database.html", context=context)
+class GameInformationListView(generic.ListView):
+    model = GameInformation
+    context_object_name = 'games_list'
+    paginate_by = 10
+    template_name = 'stats/database.html'
+    ordering = ['id']
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        query = self.request.GET.get('q')
+
+        column_sort = self.request.GET.get('column')
+
+        if query:
+            queryset = queryset.filter(Q(name__icontains=query))
+
+        allowed_sort_fields = ['id', 'appid', 'name', 'price', 'last_updated']
+        if column_sort in allowed_sort_fields:
+            queryset = queryset.order_by(column_sort)
+        else:
+            queryset.order_by('id')
+
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the search query
+        context["search_query"] = self.request.GET.get('q', '')
+
+        return context
 
 def find_steam_id(request):
     return render(request, "stats/find_your_steam_id.html")
