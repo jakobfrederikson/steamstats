@@ -6,4 +6,5 @@ class SteamIDForm(forms.Form):
                                    attrs={'class': 'form-control',
                                            'placeholder': 'Enter any Steam ID here'
                                         }
-                               ))
+                               ),
+                               required=True)
