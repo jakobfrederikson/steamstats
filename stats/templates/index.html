@@ -3,8 +3,8 @@
 {% block content %}
 
 <div class="row justify-content-center align-items-center mt-4">
-  <div class="col-md-4">
-    <form action="" method="post">
+  <div class="col-md-4" id="steam_id_div">
+    <form action="" method="post" id="steam_id_form">
       {% csrf_token %}
       {% for field in form %}
         <div class="mb-3">
@@ -12,11 +12,34 @@
           {{ field }}
         </div>
       {% endfor %}
+      {% if from.errors %}
+        <div class="alert alert-danger">
+            {{ form.errors }}
+        </div>
+      {% endif %}
       <div class="d-grid">
-        <input type="submit" value="Submit" class="btn btn-primary"/>
+        <input type="submit" value="Submit" class="btn btn-primary" onClick="displayLoadingMessage()"/>
       </div>      
     </form>
   </div>
-</div>    
+</div>
+
+<script>
+  function displayLoadingMessage() {
+    let steam_id_div = document.getElementById("steam_id_div");
+    let steam_id_form = document.getElementById("steam_id_form");
+
+    steam_id_form.style.display = "none";
+    
+    let loadingDiv = document.createElement("div");
+    loadingDiv.className += "text-center";
+    
+    let loadingMessage = document.createElement("p");
+    loadingMessage.textContent = "Loading your profile..."
+
+    loadingDiv.appendChild(loadingMessage);
+    steam_id_div.appendChild(loadingDiv);
+  }
+</script>
 
 {% endblock %}

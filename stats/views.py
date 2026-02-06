@@ -21,7 +21,7 @@ def index(request):
         context = {}
         context["form"] = form
 
-    return render(request, 'index.html', context=context)    
+    return render(request, 'index.html', context=context)
 
 
 # Display details about a user after receiving their steam ID
@@ -101,9 +101,12 @@ class GameInformationListView(generic.ListView):
     template_name = 'stats/database.html'
     ordering = ['id']
 
+    # https://docs.djangoproject.com/en/6.0/topics/class-based-views/generic-display/#dynamic-filtering
     def get_queryset(self):
         queryset = super().get_queryset()
 
+        #QueryDict.get(key, default=None)
+        # https://docs.djangoproject.com/en/6.0/ref/request-response/#django.http.QueryDict.get
         query = self.request.GET.get('q')
 
         column_sort = self.request.GET.get('column')
@@ -119,6 +122,7 @@ class GameInformationListView(generic.ListView):
 
         return queryset
     
+    # https://docs.djangoproject.com/en/6.0/topics/class-based-views/generic-display/#adding-extra-context
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
