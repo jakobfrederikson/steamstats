@@ -129,6 +129,9 @@ class GameInformationListView(generic.ListView):
         # Add in the search query
         context["search_query"] = self.request.GET.get('q', '')
 
+        total_games = GameInformation.objects.all().count()
+        context["total_games"] = total_games
+
         return context
 
 def find_steam_id(request):
