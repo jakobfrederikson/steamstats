@@ -5,5 +5,5 @@ urlpatterns = [
      path('', views.index, name='index'),
      path('detail/<str:steam_id>', views.detail, name='detail'),
      path('database/', views.GameInformationListView.as_view(), name='database'),
-     path('findsteamid/', views.find_steam_id, name='find_steam_id'),
+     path('findsteamid/', views.find_steam_id, name='find_steam_id')
 ]
