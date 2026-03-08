@@ -5,4 +5,6 @@ I store any games pulled from peoples libraries in a SQLite database as it took 
 
 Thank you to [callFEELD's Steam ID converter](https://github.com/callFEELD/SteamID-Converter-python), which I use to help convert any type of Steam ID someone might input into the steam ID form.
 
-You can find my updated version of the Steam ID converter [here](https://github.com/jakobfrederikson/SteamID-Converter-python).
+You can find my updated version of the Steam ID converter here: [https://github.com/jakobfrederikson/SteamID-Converter-python](https://github.com/jakobfrederikson/SteamID-Converter-python).
+
+View the live site here: [https://worzell.pythonanywhere.com/stats/](https://worzell.pythonanywhere.com/stats/)
