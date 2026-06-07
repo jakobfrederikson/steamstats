@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.utils import timezone
@@ -103,7 +103,7 @@ class GameInformationListView(generic.ListView):
 
     # https://docs.djangoproject.com/en/6.0/topics/class-based-views/generic-display/#dynamic-filtering
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().annotate(total_hits=Count("unique_hits"))
 
         #QueryDict.get(key, default=None)
         # https://docs.djangoproject.com/en/6.0/ref/request-response/#django.http.QueryDict.get
@@ -114,9 +114,16 @@ class GameInformationListView(generic.ListView):
         if query:
             queryset = queryset.filter(Q(name__icontains=query))
 
-        allowed_sort_fields = ['id', 'appid', 'name', 'price', 'last_updated']
+        allowed_sort_fields = ['id', 'appid', 'name', 'price', 'total_hits', 'last_updated']
+
+        if column_sort == 'unique_hits':
+            column_sort = 'total_hits'
+
         if column_sort in allowed_sort_fields:
-            queryset = queryset.order_by(column_sort)
+            if column_sort == 'total_hits':
+                queryset = queryset.order_by('-total_hits')
+            else:
+                queryset = queryset.order_by(column_sort)
         else:
             queryset.order_by('id')
 
