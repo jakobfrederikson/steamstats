@@ -1,4 +1,6 @@
+from django.db.models import Count, Q
 from django.shortcuts import render, redirect
+from django.views import generic
 from django.utils import timezone
 
 from stats import services
@@ -19,7 +21,7 @@ def index(request):
         context = {}
         context["form"] = form
 
-    return render(request, 'index.html', context=context)    
+    return render(request, 'index.html', context=context)
 
 
 # Display details about a user after receiving their steam ID
@@ -92,11 +94,52 @@ def detail(request, steam_id):
     return render(request, 'stats/detail.html', context=context)
 
 
-def database(request):
-    games = GameInformation.objects.all()
-    context = { 'games': games }
-    return render(request, "stats/database.html", context=context)
+class GameInformationListView(generic.ListView):
+    model = GameInformation
+    context_object_name = 'games_list'
+    paginate_by = 10
+    template_name = 'stats/database.html'
+    ordering = ['id']
 
+    # https://docs.djangoproject.com/en/6.0/topics/class-based-views/generic-display/#dynamic-filtering
+    def get_queryset(self):
+        queryset = super().get_queryset().annotate(total_hits=Count("unique_hits"))
+
+        #QueryDict.get(key, default=None)
+        # https://docs.djangoproject.com/en/6.0/ref/request-response/#django.http.QueryDict.get
+        query = self.request.GET.get('q')
+
+        column_sort = self.request.GET.get('column')
+
+        if query:
+            queryset = queryset.filter(Q(name__icontains=query))
+
+        allowed_sort_fields = ['id', 'appid', 'name', 'price', 'total_hits', 'last_updated']
+
+        if column_sort == 'unique_hits':
+            column_sort = 'total_hits'
+
+        if column_sort in allowed_sort_fields:
+            if column_sort == 'total_hits':
+                queryset = queryset.order_by('-total_hits')
+            else:
+                queryset = queryset.order_by(column_sort)
+        else:
+            queryset.order_by('id')
+
+        return queryset
+    
+    # https://docs.djangoproject.com/en/6.0/topics/class-based-views/generic-display/#adding-extra-context
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in the search query
+        context["search_query"] = self.request.GET.get('q', '')
+
+        total_games = GameInformation.objects.all().count()
+        context["total_games"] = total_games
+
+        return context
 
 def find_steam_id(request):
     return render(request, "stats/find_your_steam_id.html")

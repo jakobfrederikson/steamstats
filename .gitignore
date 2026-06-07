@@ -1,5 +1,7 @@
 # Copy pasted from https://github.com/github/gitignore/blob/main/Python.gitignore
 
+staticfiles
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
