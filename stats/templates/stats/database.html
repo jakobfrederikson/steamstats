@@ -80,7 +80,7 @@
                             {% else %}
                             <td>{{ game.price|default_if_none:"--" }}</td>
                             {% endif %}
-                            <td>{{ game.unique_hits_count }}</td>
+                            <td>{{ game.total_hits }}</td>
                             <td>{{ game.last_updated }}</td>                
                         </tr>
                         {% endfor %}
@@ -93,15 +93,15 @@
                     <div class="pagination">
                         <span class="page-links">
                             {% if page_obj.has_previous %}
-                                <a href="?page=1">&laquo; first</a>
-                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                                <a href="?page=1&q={{ search_query }}&column={{ request.GET.column }}">&laquo; first</a>
+                                <a href="?page={{ page_obj.previous_page_number }}&q={{ search_query }}&column={{ request.GET.column }}">previous</a>
                             {% endif %}
                             <span class="page-current">
                                 Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                             </span>
                             {% if page_obj.has_next %}
-                                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                                <a href="?page={{ page_obj.next_page_number }}&q={{ search_query }}&column={{ request.GET.column }}">next</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ search_query }}&column={{ request.GET.column }}">last &raquo;</a>
                             {% endif %}
                         </span>
                     </div>
